@@ -1,6 +1,7 @@
 ---
 title: "European Football Championship 2024"
 sidebar: my-football-teams
+output-file: README.md
 format:
   gfm:
     toc: true
