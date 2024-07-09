@@ -163,6 +163,7 @@ euro_matches_2024_pivoted_joined_goal_summary <- euro_matches_2024_pivoted_joine
     `Goals received per 90 minutes` = mean(score_against))
 
 euro_matches_2024_pivoted_joined_goal_summary %>% 
+  select(1:4) %>% 
   filter(Team %in% c(my_teams$fullname)) %>% 
   kable()
 
@@ -211,10 +212,10 @@ euro_2024_players_summary <- euro_2024_players %>%
 euro_2024_players_summary %>% 
   filter(Country %in% my_teams$fullname) %>% 
   transmute(`Average Caps` = avg_caps,
-         `Goals` = avg_goals,
-         `Market Value (M€)` = round((avg_value / 1000000)),
-         `Height (cm)` = avg_height,
-         `Age` = avg_age) %>% 
+         `Average Goals` = avg_goals,
+         `Average Market Value (M€)` = round((avg_value / 1000000)),
+         `Average Height (cm)` = avg_height,
+         `Average Age` = avg_age) %>% 
   kable()
 ```
 
@@ -323,6 +324,7 @@ goals_fct <- function(team) {
 value_fct <- function(team) {
   euro_2024_players_max_value %>%
     filter(Country %in% team) %>%
+    mutate(Market_Value = Market_Value / 1000000) %>% 
     glue_data("{Name} with {MarketValue} M€ of market value")
 }
 
