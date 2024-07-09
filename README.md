@@ -29,9 +29,8 @@ my_teams <-
 ## Quantitative Comparison of Spain vs France
 
 The clash between Spain and France in Euro 2024 semifinals is set to be
-a thrilling and highly anticipated match.
-
-Here is a quantitative comparison of both teams.
+a thrilling and highly anticipated match. Here is a quantitative
+comparison of both teams.
 
 ### Mapping the Journey
 

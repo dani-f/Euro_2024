@@ -75,9 +75,7 @@ my_teams <-
 
 ## Quantitative Comparison of `r my_teams[[1, 2]]` vs `r my_teams[[2, 2]]`
 
-The clash between `r my_teams[[1, 2]]` and `r my_teams[[2, 2]]` in Euro 2024 semifinals is set to be a thrilling and highly anticipated match.
-
-Here is a quantitative comparison of both teams.
+The clash between `r my_teams[[1, 2]]` and `r my_teams[[2, 2]]` in Euro 2024 semifinals is set to be a thrilling and highly anticipated match. Here is a quantitative comparison of both teams.
 
 ### Mapping the Journey
 
