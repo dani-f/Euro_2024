@@ -1,6 +1,8 @@
 ---
 title: "European Football Championship 2024"
 sidebar: my-football-teams
+output:
+  rmarkdown::github_document
 format:
   html:
     toc: true
