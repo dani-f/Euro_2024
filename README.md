@@ -29,7 +29,7 @@ my_teams <-
 ## Quantitative Comparison of Spain vs France
 
 The clash between Spain and France in Euro 2024 semifinals is set to be
-a thrilling and highly anticipated match. Here is a quantitative
+a thrilling and highly anticipated match. Check out this quantitative
 comparison of both teams.
 
 ### Mapping the Journey
@@ -47,7 +47,7 @@ plot_team_journey <- function(team, show_legend = TRUE) {
   
   basecamp_data <- filter(basecamps, team_code == team)
   
-  p <- ggplot() +
+  ggplot() +
     # Plot German map with map package data
     geom_polygon(data = germany,
                  aes(x = long, y = lat, group = group),
@@ -69,15 +69,6 @@ plot_team_journey <- function(team, show_legend = TRUE) {
     ggtitle(paste0(team)) +
     theme(plot.title = element_text(hjust = 0.5),
           legend.position = "top")
-  
-  # Control if legend is shown or hidden
-  if (show_legend) {
-    p <- p
-  } else {
-    p <- p + theme(legend.position = "none")
-  }
-  
-  return(p)
 }
 
 # Show both plots in the same pane
@@ -117,8 +108,8 @@ euro_matches_2024_pivoted_joined <- euro_matches_2024_pivoted %>%
 
 </details>
 
-**Scoring dynamics**: comparing the average goals scored and received by
-each team throughout the tournament.
+**Scoring dynamics**: comparing the number of goals scored and received
+by each team throughout the tournament.
 
 <details>
 <summary>Code</summary>
@@ -127,8 +118,12 @@ each team throughout the tournament.
 euro_matches_2024_pivoted_joined_goal_summary <- euro_matches_2024_pivoted_joined %>% 
   filter(!is.na(score)) %>% 
   group_by(Team = team) %>% # group_by() and rename
-  summarise(`Goals scored per 90 minutes` = mean(score),
-            `Goals received per 90 minutes` = mean(score_against))
+  summarise(
+    `Matches played` = n(),
+    `Goals scored` = sum(score),
+    `Goals received` = sum(score_against),
+    `Goals scored per 90 minutes` = mean(score),
+    `Goals received per 90 minutes` = mean(score_against))
 
 euro_matches_2024_pivoted_joined_goal_summary %>% 
   filter(Team %in% c(my_teams$fullname)) %>% 
@@ -137,10 +132,10 @@ euro_matches_2024_pivoted_joined_goal_summary %>%
 
 </details>
 
-| Team   | Goals scored per 90 minutes | Goals received per 90 minutes |
-|:-------|----------------------------:|------------------------------:|
-| France |                         0.6 |                           0.2 |
-| Spain  |                         2.0 |                           0.4 |
+| Team   | Matches played | Goals scored | Goals received | Goals scored per 90 minutes | Goals received per 90 minutes |
+|:-------|---------------:|-------------:|---------------:|----------------------------:|------------------------------:|
+| France |              5 |            3 |              1 |                         0.6 |                           0.2 |
+| Spain  |              5 |           10 |              2 |                         2.0 |                           0.4 |
 
 France only managed to score three goals, with one penalty and two own
 goals. Let’s put this poor performance in visual relation to all other
@@ -166,46 +161,6 @@ euro_matches_2024_pivoted_joined_goal_summary %>%
 </details>
 
 ![](Euro_2024_files/figure-commonmark/chart%20average%20goals-1.png)
-
-**Spotlight on the stars**: who are the key players?
-
-<details>
-<summary>Code</summary>
-
-``` r
-euro_2024_players_max_goals <- euro_2024_players %>%
-  group_by(Country) %>% 
-  filter(Goals == max(Goals)) %>% 
-  ungroup()
-
-euro_2024_players_max_caps <- euro_2024_players %>%
-  group_by(Country) %>% 
-  filter(Caps == max(Caps)) %>% 
-  ungroup()
-
-caps_fct <- function(team) {
-  euro_2024_players_max_caps %>%
-  filter(Country %in% team) %>%
-  glue_data("{Name} with {Caps} Caps")
-}
-
-goals_fct <- function(team) {
-  euro_2024_players_max_goals %>%
-  filter(Country %in% team) %>%
-  glue_data("{Name} with {Goals} Goals")
-}
-```
-
-</details>
-
-- Spain:
-  - Player with the most international appearances: Álvaro Morata with
-    72 Caps.
-  - Player with the most goals scored: Álvaro Morata with 34 Goals.
-- France:
-  - Player with the most international appearances: Olivier Giroud with
-    132 Caps.
-  - Player with the most goals scored: Olivier Giroud with 57 Goals.
 
 **Inside the teams**: what are their strengths and weaknesses?
 
@@ -324,6 +279,61 @@ legend("topright",
 </details>
 
 ![](Euro_2024_files/figure-commonmark/radarchart%20strength%20and%20weaknesses-1.png)
+
+**Spotlight on the stars**: who are the key players?
+
+<details>
+<summary>Code</summary>
+
+``` r
+euro_2024_players_max_goals <- euro_2024_players %>%
+  group_by(Country) %>% 
+  filter(Goals == max(Goals)) %>% 
+  ungroup()
+
+euro_2024_players_max_caps <- euro_2024_players %>%
+  group_by(Country) %>% 
+  filter(Caps == max(Caps)) %>% 
+  ungroup()
+
+euro_2024_players_max_value <- euro_2024_players %>%
+  group_by(Country) %>% 
+  filter(MarketValue == max(MarketValue)) %>% 
+  ungroup()
+
+caps_fct <- function(team) {
+  euro_2024_players_max_caps %>%
+    filter(Country %in% team) %>%
+    glue_data("{Name} with {Caps} Caps")
+}
+
+goals_fct <- function(team) {
+  euro_2024_players_max_goals %>%
+    filter(Country %in% team) %>%
+    glue_data("{Name} with {Goals} Goals")
+}
+
+value_fct <- function(team) {
+  euro_2024_players_max_value %>%
+    filter(Country %in% team) %>%
+    glue_data("{Name} with {MarketValue} M€ of market value")
+}
+```
+
+</details>
+
+- Spain:
+  - Player with the most international appearances: Álvaro Morata with
+    72 Caps.
+  - Player with the most goals scored: Álvaro Morata with 34 Goals.
+  - Player with the highest market value: Rodri with 120000000 M€ of
+    market value.
+- France:
+  - Player with the most international appearances: Olivier Giroud with
+    132 Caps.
+  - Player with the most goals scored: Olivier Giroud with 57 Goals.
+  - Player with the highest market value: Kylian Mbappé with 180000000
+    M€ of market value.
 
 ### Conclusion
 

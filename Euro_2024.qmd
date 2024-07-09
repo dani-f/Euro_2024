@@ -75,7 +75,7 @@ my_teams <-
 
 ## Quantitative Comparison of `r my_teams[[1, 2]]` vs `r my_teams[[2, 2]]`
 
-The clash between `r my_teams[[1, 2]]` and `r my_teams[[2, 2]]` in Euro 2024 semifinals is set to be a thrilling and highly anticipated match. Here is a quantitative comparison of both teams.
+The clash between `r my_teams[[1, 2]]` and `r my_teams[[2, 2]]` in Euro 2024 semifinals is set to be a thrilling and highly anticipated match. Check out this quantitative comparison of both teams.
 
 ### Mapping the Journey
 
@@ -91,7 +91,7 @@ plot_team_journey <- function(team, show_legend = TRUE) {
   
   basecamp_data <- filter(basecamps, team_code == team)
   
-  p <- ggplot() +
+  ggplot() +
     # Plot German map with map package data
     geom_polygon(data = germany,
                  aes(x = long, y = lat, group = group),
@@ -113,15 +113,6 @@ plot_team_journey <- function(team, show_legend = TRUE) {
     ggtitle(paste0(team)) +
     theme(plot.title = element_text(hjust = 0.5),
           legend.position = "top")
-  
-  # Control if legend is shown or hidden
-  if (show_legend) {
-    p <- p
-  } else {
-    p <- p + theme(legend.position = "none")
-  }
-  
-  return(p)
 }
 
 # Show both plots in the same pane
@@ -156,7 +147,7 @@ euro_matches_2024_pivoted_joined <- euro_matches_2024_pivoted %>%
 
 ```
 
-**Scoring dynamics**: comparing the average goals scored and received by each team throughout the tournament.
+**Scoring dynamics**: comparing the number of goals scored and received by each team throughout the tournament.
 
 ```{r}
 #| label: numbers average goals
@@ -164,8 +155,12 @@ euro_matches_2024_pivoted_joined <- euro_matches_2024_pivoted %>%
 euro_matches_2024_pivoted_joined_goal_summary <- euro_matches_2024_pivoted_joined %>% 
   filter(!is.na(score)) %>% 
   group_by(Team = team) %>% # group_by() and rename
-  summarise(`Goals scored per 90 minutes` = mean(score),
-            `Goals received per 90 minutes` = mean(score_against))
+  summarise(
+    `Matches played` = n(),
+    `Goals scored` = sum(score),
+    `Goals received` = sum(score_against),
+    `Goals scored per 90 minutes` = mean(score),
+    `Goals received per 90 minutes` = mean(score_against))
 
 euro_matches_2024_pivoted_joined_goal_summary %>% 
   filter(Team %in% c(my_teams$fullname)) %>% 
@@ -191,42 +186,6 @@ euro_matches_2024_pivoted_joined_goal_summary %>%
   theme(legend.position = "none")
 
 ```
-
-**Spotlight on the stars**: who are the key players?
-
-```{r}
-#| label: player statistics
-
-euro_2024_players_max_goals <- euro_2024_players %>%
-  group_by(Country) %>% 
-  filter(Goals == max(Goals)) %>% 
-  ungroup()
-
-euro_2024_players_max_caps <- euro_2024_players %>%
-  group_by(Country) %>% 
-  filter(Caps == max(Caps)) %>% 
-  ungroup()
-
-caps_fct <- function(team) {
-  euro_2024_players_max_caps %>%
-  filter(Country %in% team) %>%
-  glue_data("{Name} with {Caps} Caps")
-}
-
-goals_fct <- function(team) {
-  euro_2024_players_max_goals %>%
-  filter(Country %in% team) %>%
-  glue_data("{Name} with {Goals} Goals")
-}
-
-```
-
--   `r my_teams[[1, 2]]`:
-    -   Player with the most international appearances: `r caps_fct(my_teams[[1, 2]])`.
-    -   Player with the most goals scored: `r goals_fct(my_teams[[1, 2]])`.
--   `r my_teams[[2, 2]]`:
-    -   Player with the most international appearances: `r caps_fct(my_teams[[2, 2]])`.
-    -   Player with the most goals scored: `r goals_fct(my_teams[[2, 2]])`.
 
 **Inside the teams**: what are their strengths and weaknesses?
 
@@ -328,6 +287,55 @@ legend("topright",
        lwd = 5)
 
 ```
+
+**Spotlight on the stars**: who are the key players?
+
+```{r}
+#| label: player statistics
+
+euro_2024_players_max_goals <- euro_2024_players %>%
+  group_by(Country) %>% 
+  filter(Goals == max(Goals)) %>% 
+  ungroup()
+
+euro_2024_players_max_caps <- euro_2024_players %>%
+  group_by(Country) %>% 
+  filter(Caps == max(Caps)) %>% 
+  ungroup()
+
+euro_2024_players_max_value <- euro_2024_players %>%
+  group_by(Country) %>% 
+  filter(MarketValue == max(MarketValue)) %>% 
+  ungroup()
+
+caps_fct <- function(team) {
+  euro_2024_players_max_caps %>%
+    filter(Country %in% team) %>%
+    glue_data("{Name} with {Caps} Caps")
+}
+
+goals_fct <- function(team) {
+  euro_2024_players_max_goals %>%
+    filter(Country %in% team) %>%
+    glue_data("{Name} with {Goals} Goals")
+}
+
+value_fct <- function(team) {
+  euro_2024_players_max_value %>%
+    filter(Country %in% team) %>%
+    glue_data("{Name} with {MarketValue} M€ of market value")
+}
+
+```
+
+-   `r my_teams[[1, 2]]`:
+    -   Player with the most international appearances: `r caps_fct(my_teams[[1, 2]])`.
+    -   Player with the most goals scored: `r goals_fct(my_teams[[1, 2]])`.
+    -   Player with the highest market value: `r value_fct(my_teams[[1, 2]])`.
+-   `r my_teams[[2, 2]]`:
+    -   Player with the most international appearances: `r caps_fct(my_teams[[2, 2]])`.
+    -   Player with the most goals scored: `r goals_fct(my_teams[[2, 2]])`.
+    -   Player with the highest market value: `r value_fct(my_teams[[2, 2]])`.
 
 ### Conclusion
 
