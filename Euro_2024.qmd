@@ -7,6 +7,7 @@ format:
     toc-location: right
     toc-title: "Content"
     toc-expand: true
+    code-fold: hide
 params:
   code_a: ESP
   fullname_a: Spain
