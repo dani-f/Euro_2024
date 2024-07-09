@@ -77,6 +77,8 @@ my_teams <-
 
 The clash between `r my_teams[[1, 2]]` and `r my_teams[[2, 2]]` in Euro 2024 semifinals is set to be a thrilling and highly anticipated match.
 
+Here is a quantitative comparison of both teams.
+
 ### Mapping the Journey
 
 Here are the teams' venues and training camps across the Euro 2024.
@@ -99,21 +101,22 @@ plot_team_journey <- function(team, show_legend = TRUE) {
     geom_point(data = match_data,
                aes(x = stadium_longitude, y = stadium_latitude, color = "Venues")) +
     geom_point(data = basecamp_data,
-               aes(x = long, y = lat, color = "Basecamps"), shape = 15) +
+               aes(x = long, y = lat, color = "Basecamp"), shape = 15) +
     geom_text(data = basecamp_data,
-              aes(label = basecamp, x = long, y = lat, color = "Basecamps"),
+              aes(label = basecamp, x = long, y = lat, color = "Basecamp"),
               hjust = -0.05) +
     geom_text(data = match_data,
               aes(label = stadium_city, x = stadium_longitude, y = stadium_latitude, color = "Venues"),
               hjust = -0.1) +
     scale_color_manual(name = "",
-                       values = c("Venues" = "black", "Basecamps" = "blue")) +
+                       values = c("Venues" = "black", "Basecamp" = "blue")) +
     theme_void() +
     # Use paste() function to enquote team variable
     ggtitle(paste0(team)) +
-    theme(plot.title = element_text(hjust = 0.5))
+    theme(plot.title = element_text(hjust = 0.5),
+          legend.position = "top")
   
-  # Show legend only for second plot
+  # Control if legend is shown or hidden
   if (show_legend) {
     p <- p
   } else {
@@ -124,7 +127,7 @@ plot_team_journey <- function(team, show_legend = TRUE) {
 }
 
 # Show both plots in the same pane
-grid.arrange(plot_team_journey(my_teams$code[1], show_legend = FALSE),
+grid.arrange(plot_team_journey(my_teams$code[1]),
              plot_team_journey(my_teams$code[2]),
              ncol = 2)
 
