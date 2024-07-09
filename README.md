@@ -261,7 +261,7 @@ radarchart_data %>%
     plwd = 2,
     plty = 1,
     vlabels=c("Caps", "Goals", 
-              "Value", "Height", "Age"),
+              "Market Value", "Height", "Age"),
     # custom the grid
     cglcol = "#000000",
     cglty = 1,
