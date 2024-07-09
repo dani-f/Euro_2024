@@ -193,22 +193,22 @@ euro_2024_players_summary <- euro_2024_players %>%
 
 euro_2024_players_summary %>% 
   filter(Country %in% my_teams$fullname) %>% 
-  transmute(`Average Caps` = avg_caps,
-         `Average Goals` = avg_goals,
-         `Average Market Value (M€)` = round((avg_value / 1000000)),
-         `Average Height (cm)` = avg_height,
-         `Average Age` = avg_age) %>% 
-  kable(caption = "Numbers are averages")
+  transmute(
+    Country,
+    `Average Caps` = avg_caps,
+    `Average Goals` = avg_goals,
+    `Average Market Value (M€)` = round((avg_value / 1000000)),
+    `Average Height (cm)` = avg_height,
+    `Average Age` = avg_age) %>% 
+  kable()
 ```
 
 </details>
 
-| Average Caps | Average Goals | Average Market Value (M€) | Average Height (cm) | Average Age |
-|-------------:|--------------:|--------------------------:|--------------------:|------------:|
-|           33 |             8 |                        49 |                 184 |          27 |
-|           21 |             4 |                        37 |                 182 |          27 |
-
-Numbers are averages
+| Country | Average Caps | Average Goals | Average Market Value (M€) | Average Height (cm) | Average Age |
+|:--------|-------------:|--------------:|--------------------------:|--------------------:|------------:|
+| France  |           33 |             8 |                        49 |                 184 |          27 |
+| Spain   |           21 |             4 |                        37 |                 182 |          27 |
 
 For a clearer picture, here’s a visual breakdown.
 
