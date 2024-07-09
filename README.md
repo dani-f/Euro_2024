@@ -169,7 +169,8 @@ For each team, we look at the average per player of
 
 - International appearances (caps): reflecting a player’s experience and
   consistency at the international level.
-- Goals: indicating a team’s offensive capability.
+- Goals (in international matches): indicating a team’s offensive
+  capability.
 - Market value: providing insight into each player’s perceived worth
   based on market demand.
 - Height: a strategic factor that was highlighted by former German

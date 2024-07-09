@@ -193,7 +193,7 @@ euro_matches_2024_pivoted_joined_goal_summary %>%
 For each team, we look at the average per player of
 
 -   International appearances (caps): reflecting a player's experience and consistency at the international level.
--   Goals (in a player´s international matches): indicating a team's offensive capability.
+-   Goals (in international matches): indicating a team's offensive capability.
 -   Market value: providing insight into each player's perceived worth based on market demand.
 -   Height: a strategic factor that was highlighted by former German national keeper Jens Lehmann as a disadvantage for Spain's team before playing against Germany. They won anyways, so how much does height really matter when comparing two teams?
 -   Age: indicating the balance between youthful energy and veteran experience.
