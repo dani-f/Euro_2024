@@ -190,7 +190,7 @@ euro_matches_2024_pivoted_joined_goal_summary %>%
 
 **Inside the teams**: what are their strengths and weaknesses?
 
-For each team, we look at the average number per player of
+For each team, we look at the average per player of
 
 -   International appearances (caps): reflecting a player's experience and consistency at the international level.
 -   Goals: indicating a team's offensive capability.
@@ -216,7 +216,7 @@ euro_2024_players_summary %>%
          `Average Market Value (M€)` = round((avg_value / 1000000)),
          `Average Height (cm)` = avg_height,
          `Average Age` = avg_age) %>% 
-  kable()
+  kable(caption = "Numbers are averages")
 ```
 
 For a clearer picture, here’s a visual breakdown.
@@ -324,7 +324,7 @@ goals_fct <- function(team) {
 value_fct <- function(team) {
   euro_2024_players_max_value %>%
     filter(Country %in% team) %>%
-    mutate(Market_Value = Market_Value / 1000000) %>% 
+    mutate(MarketValue = MarketValue / 1000000) %>% 
     glue_data("{Name} with {MarketValue} M€ of market value")
 }
 

@@ -126,16 +126,17 @@ euro_matches_2024_pivoted_joined_goal_summary <- euro_matches_2024_pivoted_joine
     `Goals received per 90 minutes` = mean(score_against))
 
 euro_matches_2024_pivoted_joined_goal_summary %>% 
+  select(1:4) %>% 
   filter(Team %in% c(my_teams$fullname)) %>% 
   kable()
 ```
 
 </details>
 
-| Team   | Matches played | Goals scored | Goals received | Goals scored per 90 minutes | Goals received per 90 minutes |
-|:-------|---------------:|-------------:|---------------:|----------------------------:|------------------------------:|
-| France |              5 |            3 |              1 |                         0.6 |                           0.2 |
-| Spain  |              5 |           10 |              2 |                         2.0 |                           0.4 |
+| Team   | Matches played | Goals scored | Goals received |
+|:-------|---------------:|-------------:|---------------:|
+| France |              5 |            3 |              1 |
+| Spain  |              5 |           10 |              2 |
 
 France only managed to score three goals, with one penalty and two own
 goals. Let’s put this poor performance in visual relation to all other
@@ -164,7 +165,7 @@ euro_matches_2024_pivoted_joined_goal_summary %>%
 
 **Inside the teams**: what are their strengths and weaknesses?
 
-For each team, we look at the average number per player of
+For each team, we look at the average per player of
 
 - International appearances (caps): reflecting a player’s experience and
   consistency at the international level.
@@ -193,19 +194,21 @@ euro_2024_players_summary <- euro_2024_players %>%
 euro_2024_players_summary %>% 
   filter(Country %in% my_teams$fullname) %>% 
   transmute(`Average Caps` = avg_caps,
-         `Goals` = avg_goals,
-         `Market Value (M€)` = round((avg_value / 1000000)),
-         `Height (cm)` = avg_height,
-         `Age` = avg_age) %>% 
-  kable()
+         `Average Goals` = avg_goals,
+         `Average Market Value (M€)` = round((avg_value / 1000000)),
+         `Average Height (cm)` = avg_height,
+         `Average Age` = avg_age) %>% 
+  kable(caption = "Numbers are averages")
 ```
 
 </details>
 
-| Average Caps | Goals | Market Value (M€) | Height (cm) | Age |
-|-------------:|------:|------------------:|------------:|----:|
-|           33 |     8 |                49 |         184 |  27 |
-|           21 |     4 |                37 |         182 |  27 |
+| Average Caps | Average Goals | Average Market Value (M€) | Average Height (cm) | Average Age |
+|-------------:|--------------:|--------------------------:|--------------------:|------------:|
+|           33 |             8 |                        49 |                 184 |          27 |
+|           21 |             4 |                        37 |                 182 |          27 |
+
+Numbers are averages
 
 For a clearer picture, here’s a visual breakdown.
 
@@ -316,6 +319,7 @@ goals_fct <- function(team) {
 value_fct <- function(team) {
   euro_2024_players_max_value %>%
     filter(Country %in% team) %>%
+    mutate(MarketValue = MarketValue / 1000000) %>% 
     glue_data("{Name} with {MarketValue} M€ of market value")
 }
 ```
@@ -326,14 +330,14 @@ value_fct <- function(team) {
   - Player with the most international appearances: Álvaro Morata with
     72 Caps.
   - Player with the most goals scored: Álvaro Morata with 34 Goals.
-  - Player with the highest market value: Rodri with 120000000 M€ of
-    market value.
+  - Player with the highest market value: Rodri with 120 M€ of market
+    value.
 - France:
   - Player with the most international appearances: Olivier Giroud with
     132 Caps.
   - Player with the most goals scored: Olivier Giroud with 57 Goals.
-  - Player with the highest market value: Kylian Mbappé with 180000000
-    M€ of market value.
+  - Player with the highest market value: Kylian Mbappé with 180 M€ of
+    market value.
 
 ### Conclusion
 
