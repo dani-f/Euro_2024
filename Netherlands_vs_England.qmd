@@ -345,7 +345,7 @@ value_fct <- function(team) {
 
 ### Conclusion
 
-England appears to have the strongest team according to their players' market value. The Netherlands, on the other side, have a  very balanced squad.
+England appears to have the strongest team according to their players' market value. The Netherlands, on the other side, have a very balanced squad.
 
 We'll know who moves to the final tonight.
 
