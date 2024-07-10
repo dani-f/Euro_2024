@@ -122,8 +122,8 @@ euro_matches_2024_pivoted_joined_goal_summary <- euro_matches_2024_pivoted_joine
     `Matches played` = n(),
     `Goals scored` = sum(score),
     `Goals received` = sum(score_against),
-    `Goals scored per 90 minutes` = mean(score),
-    `Goals received per 90 minutes` = mean(score_against))
+    `Goals scored per match` = mean(score),
+    `Goals received per match` = mean(score_against))
 
 euro_matches_2024_pivoted_joined_goal_summary %>% 
   select(1:4) %>% 
@@ -145,8 +145,8 @@ Let’s put this poor performance in visual relation to all other teams.
 
 ``` r
 euro_matches_2024_pivoted_joined_goal_summary %>% 
-  ggplot(aes(x = `Goals scored per 90 minutes`,
-             y = `Goals received per 90 minutes`)) +
+  ggplot(aes(x = `Goals scored per match`,
+             y = `Goals received per match`)) +
   geom_point(aes(colour = Team %in% c(my_teams$fullname),
                  size = Team %in% c(my_teams$fullname))) +
   geom_text_repel(aes(label = Team,
