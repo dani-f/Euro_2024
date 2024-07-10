@@ -1,64 +1,16 @@
----
-title: "European Football Championship 2024"
-output-file: README.md
-format:
-  gfm:
-    toc: true
-    toc-location: right
-    toc-title: "Content"
-    toc-expand: true
-    code-fold: hide
-params:
-  code_a: ESP
-  fullname_a: Spain
-  code_b: FRA
-  fullname_b: France
----
+# European Football Championship 2024
 
-```{r}
-#| label: setup
-#| include: false
+- [Quantitative Comparison of Netherlands vs
+  England](#quantitative-comparison-of-netherlands-vs-england)
+  - [Mapping the Journey](#mapping-the-journey)
+  - [Descriptive Analytics](#descriptive-analytics)
+  - [Conclusion](#conclusion)
+  - [References](#references)
 
-library(tidyverse)
-library(knitr)
-library(glue)
-library(maps) # for plotting maps with ggplot2
-library(fmsb) # to plot a radar chart
-library(gridExtra) # to output multiple plots at once
-library(ggrepel) # for geom_text_repel() to jitter overlapping text when plotting
+<details>
+<summary>Code</summary>
 
-```
-
-```{r}
-#| label: load data
-#| include: false
-
-# Load datasets
-folder <- "Input/"
-files <- list.files(folder, pattern = ".csv", full.names = TRUE)
-
-for (file in files) {
-  data <- read.csv(file)
-  data_name <- str_remove_all(file, "^.*\\/|\\.csv$")
-  assign(data_name, data)
-}
-
-# Retrieve Federal States by the the getData() function from the raster package
-germany <- map_data("world", region = "Germany")
-
-# Basecamps of the 4 semfinalists according to https://www.uefa.com/euro2024/news/028a-1a157427e61a-b0fd19431c40-1000--uefa-euro-2024-where-will-the-teams-be-based/
-basecamps <-
-  tibble(team_code = c("ESP", "FRA", "ENG", "NED"),
-         basecamp = c("Donaueschingen", "Paderborn", "Blankenhain", "Wolfsburg"),
-         # Coordinates of the cities according to Wikipedia
-         lat = c(47.953056, 51.718056, 50.86, 52.423056),
-         long = c(8.4971, 8.757222, 11.343889, 10.787222))
-
-```
-
-```{r}
-#| label: define teams
-
+``` r
 # Parameters are set in yaml header and retrieved here
 my_teams <- 
   tibble(
@@ -66,24 +18,28 @@ my_teams <-
     fullname = c(params$fullname_a, params$fullname_b))
 
 # # Same as
-# my_teams <- 
+# my_teams <-
 #   tibble(
-#     code = c("ESP", "FRA"),
-#     fullname = c("Spain", "France"))
-
+#     code = c("NED", "ENG"),
+#     fullname = c("Netherlands", "England"))
 ```
 
-## Quantitative Comparison of `r my_teams[[1, 2]]` vs `r my_teams[[2, 2]]`
+</details>
 
-The clash between `r my_teams[[1, 2]]` and `r my_teams[[2, 2]]` in Euro 2024 semifinals is set to be a thrilling and highly anticipated match. Check out this quantitative comparison of both teams.
+## Quantitative Comparison of Netherlands vs England
+
+The clash between Netherlands and England in Euro 2024 semifinals is set
+to be a thrilling and highly anticipated match. Check out this
+quantitative comparison between the two teams.
 
 ### Mapping the Journey
 
-Here are the teams' venues and training camps across the Euro 2024.
+Here are the teams’ venues and training camps across the Euro 2024.
 
-```{r}
-#| label: maps
+<details>
+<summary>Code</summary>
 
+``` r
 # Write function for plotting
 plot_team_journey <- function(team, show_legend = TRUE) {
   match_data <- euro_matches_2024 %>% 
@@ -105,7 +61,7 @@ plot_team_journey <- function(team, show_legend = TRUE) {
               hjust = -0.05) +
     geom_text(data = match_data,
               aes(label = stadium_city, x = stadium_longitude, y = stadium_latitude, color = "Venues"),
-              hjust = -0.1) +
+              hjust = -0.05) +
     scale_color_manual(name = "",
                        values = c("Venues" = "black", "Basecamp" = "blue")) +
     theme_void() +
@@ -119,14 +75,18 @@ plot_team_journey <- function(team, show_legend = TRUE) {
 grid.arrange(plot_team_journey(my_teams$code[1]),
              plot_team_journey(my_teams$code[2]),
              ncol = 2)
-
 ```
+
+</details>
+
+![](Netherlands_vs_England_files/figure-commonmark/maps-1.png)
 
 ### Descriptive Analytics
 
-```{r}
-#| label: euro_matches_2024_pivoted
+<details>
+<summary>Code</summary>
 
+``` r
 euro_matches_2024_pivoted <- euro_matches_2024 %>%
   select(id_match, starts_with("home"), starts_with("away")) %>% 
   pivot_longer(
@@ -144,14 +104,17 @@ euro_matches_2024_pivoted_joined <- euro_matches_2024_pivoted %>%
             # set relationship to silence the warning
             relationship = "many-to-many") %>%
   filter(team != team_against)
-
 ```
 
-**Scoring dynamics**: comparing the number of goals scored and received by each team throughout the tournament.
+</details>
 
-```{r}
-#| label: numbers average goals
+**Scoring dynamics**: comparing the number of goals scored and received
+by each team throughout the tournament.
 
+<details>
+<summary>Code</summary>
+
+``` r
 euro_matches_2024_pivoted_joined_goal_summary <- euro_matches_2024_pivoted_joined %>% 
   filter(!is.na(score)) %>% 
   group_by(Team = team) %>% # group_by() and rename
@@ -166,14 +129,21 @@ euro_matches_2024_pivoted_joined_goal_summary %>%
   select(1:4) %>% 
   filter(Team %in% c(my_teams$fullname)) %>% 
   kable()
-
 ```
 
-France only managed to score three goals, with one penalty and two own goals. Let's put this poor performance in visual relation to all other teams.
+</details>
 
-```{r}
-#| label: chart average goals
+| Team        | Matches played | Goals scored | Goals received |
+|:------------|---------------:|-------------:|---------------:|
+| England     |              5 |            4 |              3 |
+| Netherlands |              5 |            9 |              5 |
 
+Let’s put this poor performance in visual relation to all other teams.
+
+<details>
+<summary>Code</summary>
+
+``` r
 euro_matches_2024_pivoted_joined_goal_summary %>% 
   ggplot(aes(x = `Goals scored per 90 minutes`,
              y = `Goals received per 90 minutes`)) +
@@ -185,22 +155,33 @@ euro_matches_2024_pivoted_joined_goal_summary %>%
   scale_size_manual(values = c(2, 3)) +
   scale_color_manual(values = c("black", "red")) +
   theme(legend.position = "none")
-
 ```
+
+</details>
+
+![](Netherlands_vs_England_files/figure-commonmark/chart%20average%20goals-1.png)
 
 **Inside the teams**: what are their strengths and weaknesses?
 
 For each team, we look at the average per player of
 
--   International appearances (caps): reflecting a player's experience and consistency at the international level.
--   Goals (in international matches): indicating a team's offensive capability.
--   Market value: providing insight into each player's perceived worth based on market demand.
--   Height: a strategic factor that was highlighted by former German national keeper Jens Lehmann as a disadvantage for Spain's team before playing against Germany. They won anyways, so how much does height really matter when comparing two teams?
--   Age: indicating the balance between youthful energy and veteran experience.
+- International appearances (caps): reflecting a player’s experience and
+  consistency at the international level.
+- Goals (in international matches): indicating a team’s offensive
+  capability.
+- Market value: providing insight into each player’s perceived worth
+  based on market demand.
+- Height: a strategic factor that was highlighted by former German
+  national keeper Jens Lehmann as a disadvantage for Spain’s team before
+  playing against Germany. They won anyways, so how much does height
+  really matter when comparing two teams?
+- Age: indicating the balance between youthful energy and veteran
+  experience.
 
-```{r}
-#| label: numbers strength and weaknesses
+<details>
+<summary>Code</summary>
 
+``` r
 euro_2024_players_summary <- euro_2024_players %>% 
   group_by(Country) %>% 
   summarise(avg_caps = round(mean(Caps)),
@@ -221,12 +202,19 @@ euro_2024_players_summary %>%
   kable()
 ```
 
+</details>
+
+| Country     | Caps | Goals | Market Value (M€) | Height (cm) | Age |
+|:------------|-----:|------:|------------------:|------------:|----:|
+| England     |   25 |     4 |                58 |         182 |  26 |
+| Netherlands |   32 |     5 |                32 |         185 |  27 |
+
 For a clearer picture, here’s a visual breakdown.
 
-```{r}
-#| label: radarchart strength and weaknesses 
-#| warning: false
+<details>
+<summary>Code</summary>
 
+``` r
 # Write function to bind_rows regardless of column names
 # Thanks to https://exploratory.io/note/kanaugust/How-to-Force-Merging-Rows-Ignoring-Columns-Names-xpI8bqI4Tm
 force_bind <- function(tbl1, tbl2) {
@@ -288,14 +276,18 @@ legend("topright",
        col = colours,
        lty = 1,
        lwd = 5)
-
 ```
+
+</details>
+
+![](Netherlands_vs_England_files/figure-commonmark/radarchart%20strength%20and%20weaknesses-1.png)
 
 **Spotlight on the stars**: who are the key players?
 
-```{r}
-#| label: player statistics
+<details>
+<summary>Code</summary>
 
+``` r
 euro_2024_players_max_goals <- euro_2024_players %>%
   group_by(Country) %>% 
   filter(Goals == max(Goals)) %>% 
@@ -329,25 +321,35 @@ value_fct <- function(team) {
     mutate(MarketValue = MarketValue / 1000000) %>% 
     glue_data("{Name} with {MarketValue} M€ of market value")
 }
-
 ```
 
--   `r my_teams[[1, 2]]`:
-    -   Player with the most international appearances: `r caps_fct(my_teams[[1, 2]])`.
-    -   Player with the most goals scored: `r goals_fct(my_teams[[1, 2]])`.
-    -   Player with the highest market value: `r value_fct(my_teams[[1, 2]])`.
--   `r my_teams[[2, 2]]`:
-    -   Player with the most international appearances: `r caps_fct(my_teams[[2, 2]])`.
-    -   Player with the most goals scored: `r goals_fct(my_teams[[2, 2]])`.
-    -   Player with the highest market value: `r value_fct(my_teams[[2, 2]])`.
+</details>
+
+- Netherlands:
+  - Player with the most international appearances: Daley Blind with 107
+    Caps.
+  - Player with the most goals scored: Memphis Depay with 45 Goals.
+  - Player with the highest market value: Xavi Simons with 80 M€ of
+    market value.
+- England:
+  - Player with the most international appearances: Harry Kane with 91
+    Caps.
+  - Player with the most goals scored: Harry Kane with 63 Goals.
+  - Player with the highest market value: Jude Bellingham with 180 M€ of
+    market value.
 
 ### Conclusion
 
-The pre-tournament data indicated that France had an advantage due to their experienced and highly skilled individual players, but it looks like Spain made up for this with a strong team performance during the Euro 2024.
+England appears to have the strongest team according to their players’
+market value. The Netherlands, on the other side, have a very balanced
+squad.
 
-We'll know who moves to the final tonight.
+We’ll know who moves to the final tonight.
 
 ### References
 
--   `euro_matches_2024.csv` downoaded from [Kaggle - dataset name: football-soccer-uefa-euro-1960-2024](https://www.kaggle.com/datasets/piterfm/football-soccer-uefa-euro-1960-2024).
--   `euro_2024_players.csv` (player statistics from before the European Championship) downoaded from [Kaggle - dataset name: uefa-euro-2024-players](https://www.kaggle.com/datasets/damirdizdarevic/uefa-euro-2024-players).
+- `euro_matches_2024.csv` downoaded from [Kaggle - dataset name:
+  football-soccer-uefa-euro-1960-2024](https://www.kaggle.com/datasets/piterfm/football-soccer-uefa-euro-1960-2024).
+- `euro_2024_players.csv` (player statistics from before the European
+  Championship) downoaded from [Kaggle - dataset name:
+  uefa-euro-2024-players](https://www.kaggle.com/datasets/damirdizdarevic/uefa-euro-2024-players).
