@@ -18,10 +18,10 @@ my_teams <-
     fullname = c(params$fullname_a, params$fullname_b))
 
 # # Same as
-# my_teams <- 
+# my_teams <-
 #   tibble(
-#     code = c("ESP", "FRA"),
-#     fullname = c("Spain", "France"))
+#     code = c("NED", "ENG"),
+#     fullname = c("Netherlands", "England"))
 ```
 
 </details>
@@ -43,7 +43,9 @@ Here are the teams’ venues and training camps across the Euro 2024.
 # Write function for plotting
 plot_team_journey <- function(team, show_legend = TRUE) {
   match_data <- euro_matches_2024 %>% 
-    filter(home_team_code == team | away_team_code == team)
+    filter(home_team_code == team | away_team_code == team) %>% 
+    # since we use geom_text_repel() a city would be plotted twice in different positions
+    distinct(stadium_city, .keep_all = TRUE)
   
   basecamp_data <- filter(basecamps, team_code == team)
   
@@ -58,10 +60,11 @@ plot_team_journey <- function(team, show_legend = TRUE) {
                aes(x = long, y = lat, color = "Basecamp"), shape = 15) +
     geom_text(data = basecamp_data,
               aes(label = basecamp, x = long, y = lat, color = "Basecamp"),
+              show.legend = FALSE,
               hjust = -0.05) +
-    geom_text(data = match_data,
+    geom_text_repel(data = match_data,
               aes(label = stadium_city, x = stadium_longitude, y = stadium_latitude, color = "Venues"),
-              hjust = -0.1) +
+              show.legend = FALSE) +
     scale_color_manual(name = "",
                        values = c("Venues" = "black", "Basecamp" = "blue")) +
     theme_void() +
@@ -109,7 +112,7 @@ euro_matches_2024_pivoted_joined <- euro_matches_2024_pivoted %>%
 </details>
 
 **Scoring dynamics**: comparing the number of goals scored and received
-by each team throughout the tournament.
+by each team throughout the current tournament.
 
 <details>
 <summary>Code</summary>
@@ -351,8 +354,11 @@ We’ll know who moves to the final tonight.
 
 ### References
 
-- `euro_matches_2024.csv` downoaded from [Kaggle - dataset name:
-  football-soccer-uefa-euro-1960-2024](https://www.kaggle.com/datasets/piterfm/football-soccer-uefa-euro-1960-2024).
+- `euro_matches_2024.csv` downloaded from <a
+  href="https://www.kaggle.com/datasets/piterfm/football-soccer-uefa-euro-1960-2024"
+  target="_blank">Kaggle - dataset name:
+  football-soccer-uefa-euro-1960-2024</a>.
 - `euro_2024_players.csv` (player statistics from before the European
-  Championship) downoaded from [Kaggle - dataset name:
-  uefa-euro-2024-players](https://www.kaggle.com/datasets/damirdizdarevic/uefa-euro-2024-players).
+  Championship) downloaded from <a
+  href="https://www.kaggle.com/datasets/damirdizdarevic/uefa-euro-2024-players"
+  target="_blank">Kaggle - dataset name: uefa-euro-2024-players</a>.
