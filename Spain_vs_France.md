@@ -60,8 +60,7 @@ plot_team_journey <- function(team, show_legend = TRUE) {
                aes(x = long, y = lat, color = "Basecamp"), shape = 15) +
     geom_text_repel(data = basecamp_data,
               aes(label = basecamp, x = long, y = lat, color = "Basecamp"),
-              show.legend = FALSE,
-              hjust = -0.05) +
+              show.legend = FALSE) +
     geom_text_repel(data = match_data,
               aes(label = stadium_city, x = stadium_longitude, y = stadium_latitude, color = "Venues"),
               show.legend = FALSE) +
