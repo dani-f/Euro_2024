@@ -20,8 +20,8 @@ my_teams <-
 # # Same as
 # my_teams <-
 #   tibble(
-#     code = c("NED", "ENG"),
-#     fullname = c("Netherlands", "England"))
+#     code = c("ESP", "FRA"),
+#     fullname = c("Spain", "France"))
 ```
 
 </details>
