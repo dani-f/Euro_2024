@@ -171,7 +171,7 @@ euro_matches_2024_pivoted_joined_goal_summary %>%
 
 ```
 
-Let's put this poor performance in visual relation to all other teams.
+Let's put this performance in visual relation to all other teams.
 
 ```{r}
 #| label: chart average goals

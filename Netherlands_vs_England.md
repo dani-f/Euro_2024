@@ -138,7 +138,7 @@ euro_matches_2024_pivoted_joined_goal_summary %>%
 | England     |              5 |            4 |              3 |
 | Netherlands |              5 |            9 |              5 |
 
-Let’s put this poor performance in visual relation to all other teams.
+Let’s put this performance in visual relation to all other teams.
 
 <details>
 <summary>Code</summary>
