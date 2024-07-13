@@ -42,7 +42,7 @@ Here are the teams’ venues and training camps across the Euro 2024.
 ``` r
 # Write function for plotting
 plot_team_journey <- function(team, show_legend = TRUE) {
-  match_data <- euro_matches_2024 %>% 
+  match_data <- euro_2024_matches %>% 
     filter(home_team_code == team | away_team_code == team) %>% 
     # since we use geom_text_repel() a city would be plotted twice in different positions
     distinct(stadium_city, .keep_all = TRUE)
@@ -90,7 +90,8 @@ grid.arrange(plot_team_journey(my_teams$code[1]),
 <summary>Code</summary>
 
 ``` r
-euro_matches_2024_pivoted <- euro_matches_2024 %>%
+euro_2024_matches_pivoted <- euro_2024_matches %>%
+  filter(date < params$match_day) %>% 
   select(id_match, starts_with("home"), starts_with("away")) %>% 
   pivot_longer(
     # pivot all columns except id_match
@@ -100,8 +101,8 @@ euro_matches_2024_pivoted <- euro_matches_2024 %>%
                  ".value"), # the remaining part of the column names should become the names of the new columns
     names_pattern = "(home|away)_(.*)") # how to split into multiple columns (".*" matches the ".value" from before)
 
-euro_matches_2024_pivoted_joined <- euro_matches_2024_pivoted %>% 
-  left_join(euro_matches_2024_pivoted,
+euro_2024_matches_pivoted_joined <- euro_2024_matches_pivoted %>% 
+  left_join(euro_2024_matches_pivoted,
             join_by(id_match),
             suffix = c("", "_against"),
             # set relationship to silence the warning
@@ -118,7 +119,7 @@ by each team throughout the current tournament.
 <summary>Code</summary>
 
 ``` r
-euro_matches_2024_pivoted_joined_goal_summary <- euro_matches_2024_pivoted_joined %>% 
+euro_2024_matches_pivoted_joined_goal_summary <- euro_2024_matches_pivoted_joined %>% 
   filter(!is.na(score)) %>% 
   group_by(Team = team) %>% # group_by() and rename
   summarise(
@@ -128,7 +129,7 @@ euro_matches_2024_pivoted_joined_goal_summary <- euro_matches_2024_pivoted_joine
     `Goals scored per match` = mean(score),
     `Goals received per match` = mean(score_against))
 
-euro_matches_2024_pivoted_joined_goal_summary %>% 
+euro_2024_matches_pivoted_joined_goal_summary %>% 
   select(1:4) %>% 
   filter(Team %in% c(my_teams$fullname)) %>% 
   kable()
@@ -147,7 +148,7 @@ Let’s put this performance in visual relation to all other teams.
 <summary>Code</summary>
 
 ``` r
-euro_matches_2024_pivoted_joined_goal_summary %>% 
+euro_2024_matches_pivoted_joined_goal_summary %>% 
   ggplot(aes(x = `Goals scored per match`,
              y = `Goals received per match`)) +
   geom_point(aes(colour = Team %in% c(my_teams$fullname),
@@ -351,11 +352,11 @@ We’ll know who moves to the final tonight.
 
 ### References
 
-- `euro_matches_2024.csv` downloaded from <a
+- `euro_2024_matches.csv` downloaded from <a
   href="https://www.kaggle.com/datasets/piterfm/football-soccer-uefa-euro-1960-2024"
-  target="_blank">Kaggle - dataset name:
-  football-soccer-uefa-euro-1960-2024</a>.
+  target="_blank">Kaggle - dataset name: Football - Soccer - UEFA EURO,
+  1960 - 2024</a>.
 - `euro_2024_players.csv` (player statistics from before the European
   Championship) downloaded from <a
   href="https://www.kaggle.com/datasets/damirdizdarevic/uefa-euro-2024-players"
-  target="_blank">Kaggle - dataset name: uefa-euro-2024-players</a>.
+  target="_blank">Kaggle - dataset name: UEFA EURO 2024 - Players</a>.

@@ -11,5 +11,6 @@ of the semifinals and final of the tournament on my
 
 Available Reports:
 
--   1st Semifinals: Spain vs France
--   2nd Semifinals: Netherlands vs England
+-   [1st Semifinal: Spain vs France](https://github.com/dani-f/Euro_2024/blob/master/Spain_vs_France.md)
+-   [2nd Semifinal: Netherlands vs England](https://github.com/dani-f/Euro_2024/blob/master/Netherlands_vs_England.md)
+-   [Final: Spain vs England](https://github.com/dani-f/Euro_2024/blob/master/Spain_vs_England.md)
