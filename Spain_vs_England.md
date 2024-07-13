@@ -308,8 +308,8 @@ euro_2024_matches_pivoted_joined_goal_summary %>%
 
 | Team    | Matches played | Goals scored | Goals received |
 |:--------|---------------:|-------------:|---------------:|
-| England |              5 |            4 |              3 |
-| Spain   |              5 |           10 |              2 |
+| England |              6 |            6 |              4 |
+| Spain   |              6 |           12 |              3 |
 
 France only managed to score three goals, with one penalty and two own
 goals. Let’s put this poor performance in visual relation to all other
