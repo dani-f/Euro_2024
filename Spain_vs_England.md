@@ -525,7 +525,7 @@ The championship trophy is supposed to be coming home to England. I
 strongly anticipate it’s not coming home. It’s going to Spain. And it’s
 going to stay there for the next 4 years.
 
-We’ll know who wins the Euro 2024 tonight.
+We’ll know who wins the Euro 2024 on Sunday.
 
 ### References
 
