@@ -29,8 +29,8 @@ my_teams <-
 
 ## Quantitative Comparison of Spain vs England
 
-The clash between Spain and England in Euro 2024 finals is set to be a
-thrilling and highly anticipated match. Check out this quantitative
+The clash between Spain and England in the Euro 2024 final is set to be
+a thrilling and highly anticipated match. Check out this quantitative
 comparison between the two teams.
 
 ### A Head to Head History
@@ -90,7 +90,9 @@ plot_data <- matches_head_to_head %>%
   group_by(decade = year(date) %/% 10 * 10, winner) %>%
   count() %>% 
   ungroup() %>% 
-  # Make sure to introduce all decades, although if no matches were played
+  # Introduce n=0 for all decades present in the data (where matches were played)
+  complete(decade, winner, fill = list(n = 0)) %>% 
+  # Make sure to introduce also decades where no matches where played
   mutate(decade = factor(decade, levels = decades)) %>% 
   complete(decade)
 
@@ -144,6 +146,7 @@ plot_data_no_matches <- plot_data %>%
   mutate(text = "No matches played in this decade")
 
 plot_data %>% 
+  filter(n != 0) %>% 
   mutate(winner = fct_relevel(winner, c(my_teams[[1, 2]], "Draw", my_teams[[2, 2]]))) %>% 
   ggplot(aes(x = paste0(decade, "s"), y = n, fill = winner)) +
   geom_col(position = "fill") +
@@ -191,7 +194,7 @@ plot_data %>%
        y = "Number of Wins",
        color = "",
        title = "A History of Wins Against Each Other") +
-  scale_y_continuous(limits = c(0, max(plot_data$n, na.rm = T) + 2)) +
+  scale_y_continuous(limits = c(-0.01, max(plot_data$n, na.rm = T) + 2)) +
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5),
         axis.text.y = element_blank(),
