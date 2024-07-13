@@ -177,7 +177,7 @@ For each team, we look at the average per player of
   based on market demand.
 - Height: a strategic factor that was highlighted by former German
   national keeper Jens Lehmann as a disadvantage for Spain’s team before
-  playing against Germany. They won anyways, so how much does height
+  playing against Germany. Spain won anyways, so how much does height
   really matter when comparing two teams?
 - Age: indicating the balance between youthful energy and veteran
   experience.
