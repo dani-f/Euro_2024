@@ -261,6 +261,7 @@ grid.arrange(plot_team_journey(my_teams$code[1]),
 
 ``` r
 euro_2024_matches_pivoted <- euro_2024_matches %>%
+  filter(date < params$match_day) %>% 
   select(id_match, starts_with("home"), starts_with("away")) %>% 
   pivot_longer(
     # pivot all columns except id_match
