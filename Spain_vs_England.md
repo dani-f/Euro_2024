@@ -177,6 +177,10 @@ The history of wins illustrates this.
 <summary>Code</summary>
 
 ``` r
+# Change "azure2"-color value of line chart for better visibility
+line_color_values <- c("darkorange", "darkgrey", "cadetblue")
+names(line_color_values) <- c(my_teams[[1, 2]], "Draw", my_teams[[2, 2]])
+
 plot_data %>%
   filter(winner != "Draw") %>% 
   ggplot(aes(x = decade,
@@ -200,7 +204,9 @@ plot_data %>%
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5),
         axis.text.y = element_blank(),
-        axis.ticks.y = element_blank())
+        axis.ticks.y = element_blank()) +
+  scale_color_manual(values = line_color_values) +
+  theme_minimal()
 ```
 
 </details>
@@ -317,9 +323,7 @@ euro_2024_matches_pivoted_joined_goal_summary %>%
 | England |              6 |            6 |              4 |
 | Spain   |              6 |           12 |              3 |
 
-France only managed to score three goals, with one penalty and two own
-goals. Let’s put this poor performance in visual relation to all other
-teams.
+Let’s put this performance in visual relation to all other teams.
 
 <details>
 <summary>Code</summary>
