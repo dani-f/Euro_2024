@@ -183,30 +183,31 @@ names(line_color_values) <- c(my_teams[[1, 2]], "Draw", my_teams[[2, 2]])
 
 plot_data %>%
   filter(winner != "Draw") %>% 
-  ggplot(aes(x = decade,
+  ggplot(aes(x = paste0(decade, "s"),
              # Offset lines to avoid overlapping
              y = if_else(winner == my_teams[[1, 2]], n + 0.01, n - 0.01),
-             color = winner, group = winner)) +
+             color = winner,
+             group = winner)) +
   geom_line(position = , linewidth = 1) +
   geom_point() +
   geom_text_repel(aes(label = n,
                 # Offset text team 1 above and team 2 below line
                 vjust = if_else(winner == my_teams[[1, 2]], -1, 1.75)),
-            size = 5,
-            # To suppress the line joining label to point
-            segment.color = NA,
-            show.legend = FALSE) +
+                size = 5,
+                # To suppress the line joining label to point
+                segment.color = NA,
+                show.legend = FALSE) +
   labs(x = "Decade",
        y = "Number of Wins",
        color = "",
        title = "A History of Wins Against Each Other") +
   scale_y_continuous(limits = c(-0.5, max(plot_data$n, na.rm = T) + 2)) +
+  theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5),
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank()) +
-  scale_color_manual(values = line_color_values) +
-  theme_minimal()
+  scale_color_manual(values = line_color_values)
 ```
 
 </details>
